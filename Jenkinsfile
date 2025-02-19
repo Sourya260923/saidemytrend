@@ -24,7 +24,7 @@ pipeline {
 
         stage('SonarQube analysis') {
             environment {
-                scannerHome = tool 'saideny-sonar-scanner'
+                scannerHome = tool 'sairam-sonar-scanner'
             }
             steps {
                 echo "Running SonarQube analysis..."
@@ -33,4 +33,3 @@ pipeline {
         }
     }
 }
-
