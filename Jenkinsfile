@@ -6,22 +6,31 @@ pipeline {
     }
 
     stages {
-        stage("build") {
+        stage('build') {
             steps {
-                sh 'mvn clean deploy'
+                echo "---------- build started ----------"
+                sh "mvn clean deploy -Dmaven.test.skip=true"
+                echo "---------- build completed ----------"
+            }
+        }
+
+        stage('test') {
+            steps {
+                echo "---------- unit test started ----------"
+                sh "mvn surefire-report:report"
+                echo "---------- unit test completed ----------"
             }
         }
 
         stage('SonarQube analysis') {
             environment {
-                scannerHome = tool 'sairam-sonar-scanner'
+                scannerHome = tool 'saideny-sonar-scanner'
             }
-
             steps {
-                withSonarQubeEnv('sairam-sonarqube-server') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
+                echo "Running SonarQube analysis..."
+                sh "$scannerHome/bin/sonar-scanner"
             }
         }
     }
 }
+
